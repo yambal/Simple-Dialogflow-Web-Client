@@ -26,7 +26,7 @@ module.exports = function(grunt) {
                         pretty: true
                 },
                 files: {
-                    "dist/test.html": "src/test.pug"
+                    "docs/test.html": "src/test.pug"
                 }
             }
         }
