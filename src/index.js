@@ -21,7 +21,6 @@ const requester = (ep, json, method = 'GET') => {
 					qs : json
 				},
 				function(error, response, body) {
-					console.log(body);
 					if(error){
 						reject(error)
 						return
@@ -62,7 +61,6 @@ const SimpleDialogflowClient = {
 };
 
 const init = (access_token, custom_url) => {
-	console.log('init', access_token, custom_url)
 	_api_ep = custom_url || API_EP
 	_session_id = nanoid();
 	_access_token = access_token;
