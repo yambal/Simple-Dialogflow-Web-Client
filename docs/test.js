@@ -70321,6 +70321,7 @@ var nanoid = require("nanoid");
 
 const API_EP = 'https://api.dialogflow.com/v1/'
 let _api_ep
+let _lang
 let _access_token;
 let _session_id;
 
@@ -70328,6 +70329,8 @@ const requester = (ep, json, method = 'GET') => {
 	return new Promise(function(resolve, reject){
 		json.sessionId = _session_id;
 		json.v = '20150910';
+		json.lang  = _lang
+
 		if(method.toLowerCase() == 'get'){
 			request(
 				{
@@ -70343,7 +70346,7 @@ const requester = (ep, json, method = 'GET') => {
 						reject(error)
 						return
 					}
-					resolve(body)
+					resolve(JSON.parse(body))
 				}
 			)
 		}
@@ -70370,29 +70373,56 @@ const requester = (ep, json, method = 'GET') => {
 };
 
 const SimpleDialogflowClient = {
+	// result.fulfillment.messages[].type
+	MESSAGE_TYPE : {
+		SIMPLE : 0,
+		CARD : 1,
+		Suggestion : 2
+	},
 	query: text => {
 		return requester("query", {
-			query: text,
-			lang: "ja"
+			query: text
 		});
 	}
 };
 
-const init = (access_token, custom_url) => {
+const init = (access_token, lang, custom_url) => {
+	_access_token = access_token;
+	_lang = lang || 'ja'
 	_api_ep = custom_url || API_EP
 	_session_id = nanoid();
-	_access_token = access_token;
 	return SimpleDialogflowClient;
 };
 
 module.exports = init;
 },{"nanoid":216,"request":275}],352:[function(require,module,exports){
-var sd = require('./index.js')('c4202a73a8b147aea7f5fc95546f0cfe', 'https://cors-anywhere.herokuapp.com/https://api.dialogflow.com/v1/');
+var sd = require("./index.js")(
+	"c4202a73a8b147aea7f5fc95546f0cfe",
+	"ja",
+	"https://cors-anywhere.herokuapp.com/https://api.dialogflow.com/v1/"
+);
 //var sd = require('./index.js')('c4202a73a8b147aea7f5fc95546f0cfe');
 
-sd.query('やぁ').then((result) => {
-	console.log(result)
-}, (error)=>{
-	console.log(error)
-})
+sd.query("やぁ").then(
+	result => {
+		console.log(result);
+		document.getElementById("result").innerText = result;
+	},
+	error => {
+		console.log(error);
+	}
+);
+
+document.getElementById("send").onclick = function() {
+	var v = document.getElementById("input").value;
+	sd.query(v).then(
+		result => {
+			console.log(JSON.stringify(result, null, 2));
+			document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+		},
+		error => {
+			console.log(error);
+		}
+	);
+};
 },{"./index.js":351}]},{},[352]);

@@ -3,6 +3,7 @@ var nanoid = require("nanoid");
 
 const API_EP = 'https://api.dialogflow.com/v1/'
 let _api_ep
+let _lang
 let _access_token;
 let _session_id;
 
@@ -10,6 +11,8 @@ const requester = (ep, json, method = 'GET') => {
 	return new Promise(function(resolve, reject){
 		json.sessionId = _session_id;
 		json.v = '20150910';
+		json.lang  = _lang
+
 		if(method.toLowerCase() == 'get'){
 			request(
 				{
@@ -25,7 +28,7 @@ const requester = (ep, json, method = 'GET') => {
 						reject(error)
 						return
 					}
-					resolve(body)
+					resolve(JSON.parse(body))
 				}
 			)
 		}
@@ -52,18 +55,24 @@ const requester = (ep, json, method = 'GET') => {
 };
 
 const SimpleDialogflowClient = {
+	// result.fulfillment.messages[].type
+	MESSAGE_TYPE : {
+		SIMPLE : 0,
+		CARD : 1,
+		Suggestion : 2
+	},
 	query: text => {
 		return requester("query", {
-			query: text,
-			lang: "ja"
+			query: text
 		});
 	}
 };
 
-const init = (access_token, custom_url) => {
+const init = (access_token, lang, custom_url) => {
+	_access_token = access_token;
+	_lang = lang || 'ja'
 	_api_ep = custom_url || API_EP
 	_session_id = nanoid();
-	_access_token = access_token;
 	return SimpleDialogflowClient;
 };
 
