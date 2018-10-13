@@ -70383,6 +70383,28 @@ const SimpleDialogflowClient = {
 		return requester("query", {
 			query: text
 		});
+	},
+	simpleQuery : (text) => {
+		return new Promise(function(resolve, reject){
+			return requester("query", {
+				query: text
+			}).then((result)=>{
+				console.log(result)
+				let messages = []
+				for(let i = 0; i < result.result.fulfillment.messages.length; i++){
+					let message = result.result.fulfillment.messages[i]
+					message.key = result.id + '_message' + i
+					messages.push(message)
+				}
+				resolve({
+					query : result.result.resolvedQuery,
+					contexts : result.result.contexts,
+					intentName : result.result.metadata.intentName,
+					isFallbackIntent : result.result.metadata.isFallbackInten,
+					messages : messages
+				})
+			});
+		})
 	}
 };
 
@@ -70416,7 +70438,8 @@ sd.query("やぁ").then(
 document.getElementById("send").onclick = function() {
 	console.log('Send')
 	var v = document.getElementById("input").value;
-	sd.query(v).then(
+	//sd.query(v).then(
+	sd.simpleQuery(v).then(
 		result => {
 			document.getElementById("result").innerText = JSON.stringify(result, null, 2);
 		},
