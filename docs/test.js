@@ -70380,6 +70380,7 @@ const SimpleDialogflowClient = {
 };
 
 const init = (access_token, custom_url) => {
+	console.log('init', access_token, custom_url)
 	_api_ep = custom_url || API_EP
 	_session_id = nanoid();
 	_access_token = access_token;
@@ -70392,5 +70393,7 @@ var sd = require('./index.js')('c4202a73a8b147aea7f5fc95546f0cfe', 'https://cors
 
 sd.query('やぁ').then((result) => {
 	console.log(result)
+}, (error)=>{
+	console.log(error)
 })
 },{"./index.js":351}]},{},[352]);

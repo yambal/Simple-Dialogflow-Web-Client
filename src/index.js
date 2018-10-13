@@ -62,6 +62,7 @@ const SimpleDialogflowClient = {
 };
 
 const init = (access_token, custom_url) => {
+	console.log('init', access_token, custom_url)
 	_api_ep = custom_url || API_EP
 	_session_id = nanoid();
 	_access_token = access_token;
