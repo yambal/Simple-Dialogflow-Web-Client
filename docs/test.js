@@ -70414,10 +70414,10 @@ sd.query("やぁ").then(
 );
 
 document.getElementById("send").onclick = function() {
+	console.log('Send')
 	var v = document.getElementById("input").value;
 	sd.query(v).then(
 		result => {
-			console.log(JSON.stringify(result, null, 2));
 			document.getElementById("result").innerText = JSON.stringify(result, null, 2);
 		},
 		error => {

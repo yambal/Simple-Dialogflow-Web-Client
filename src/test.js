@@ -16,6 +16,7 @@ sd.query("やぁ").then(
 );
 
 document.getElementById("send").onclick = function() {
+	console.log('Send')
 	var v = document.getElementById("input").value;
 	sd.query(v).then(
 		result => {
