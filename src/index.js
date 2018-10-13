@@ -1,7 +1,7 @@
 var request = require("request");
 var nanoid = require("nanoid");
 
-const API_EP = 'https://api.dialogflow.com/v1/query'
+const API_EP = 'https://api.dialogflow.com/v1/'
 let _api_ep
 let _access_token;
 let _session_id;
@@ -13,7 +13,7 @@ const requester = (ep, json, method = 'GET') => {
 		if(method.toLowerCase() == 'get'){
 			request(
 				{
-					url :_api_ep,
+					url :_api_ep + ep,
 					method: "GET",
 					headers: {
 						Authorization: "Bearer " + _access_token
